@@ -1,0 +1,189 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ------------------------------------------------------------------ */
+/*  Pressed by Meridia — design tokens                                  */
+/*  The ONLY hand-written CSS lives here (variables, base, motion).    */
+/* ------------------------------------------------------------------ */
+
+:root {
+  /* Surfaces */
+  --paper: #F6F1E8;
+  --cream: #FBF7EE;
+
+  /* Typography */
+  --ink: #1F1B16;
+  --graphite: #5C544A;
+  --stone: #A89C8A;
+  --rule: #E5DDCD;
+
+  /* Primary accent — NAVY */
+  --navy:   #1E3A8A;
+  --navy-d: #1E3179;
+  --navy-p: #172B6B;
+  --navy-s: #DBEAFE;
+
+  /* Secondary accent — moss */
+  --moss: #5A6E4A;
+  --moss-s: #DDE3CE;
+
+  /* Motion */
+  --ease: cubic-bezier(0.32, 0.72, 0.24, 1);
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    @apply bg-paper text-ink font-body antialiased;
+    font-feature-settings: 'cv11', 'ss01';
+  }
+  ::selection {
+    background: var(--navy-s);
+    color: var(--navy-p);
+  }
+}
+
+@layer components {
+  /* Buttons */
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2 rounded-full bg-navy px-6 py-3 text-sm font-medium text-cream transition-all duration-300 ease-editorial hover:bg-navy-d active:bg-navy-p hover:-translate-y-px active:translate-y-0;
+  }
+  .btn-secondary {
+    @apply inline-flex items-center justify-center gap-2 rounded-full border border-rule bg-transparent px-6 py-3 text-sm font-medium text-ink transition-all duration-300 ease-editorial hover:border-stone hover:bg-cream hover:-translate-y-px;
+  }
+  .btn-ghost {
+    @apply inline-flex items-center justify-center gap-2 rounded-full px-4 py-2 text-sm font-medium text-ink transition-colors duration-300 ease-editorial hover:bg-cream;
+  }
+
+  /* Cards */
+  .card {
+    @apply rounded-card border border-rule bg-cream shadow-card transition-all duration-300 ease-editorial;
+  }
+  .card-hover {
+    @apply hover:-translate-y-1 hover:shadow-lift;
+  }
+
+  /* Tag pills */
+  .pill {
+    @apply inline-flex items-center gap-1.5 rounded-full px-2.5 py-0.5 text-xs font-medium;
+  }
+  .pill-navy   { @apply pill bg-navy-s text-navy-p; }
+  .pill-moss   { @apply pill bg-moss-s text-moss; }
+  .pill-amber  { @apply pill bg-amber-100 text-amber-800; }
+  .pill-neutral{ @apply pill bg-rule/60 text-graphite; }
+  .pill-red    { @apply pill bg-red-100 text-red-800; }
+
+  /* Inputs */
+  .input {
+    @apply w-full rounded-lg border border-rule bg-cream px-3.5 py-2.5 text-sm text-ink placeholder-stone outline-none transition-all duration-300 ease-editorial focus:border-navy focus:ring-2 focus:ring-navy-s;
+  }
+  .label {
+    @apply mb-1.5 block text-xs font-medium uppercase tracking-wider text-graphite;
+  }
+
+  /* Nav */
+  .nav-blur {
+    background: color-mix(in srgb, var(--paper) 88%, transparent);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+  .wordmark {
+    @apply font-display italic text-2xl tracking-tight text-ink;
+  }
+}
+
+/* ------------------------------------------------------------------ */
+/*  Scroll-reveal & motion system                                       */
+/* ------------------------------------------------------------------ */
+
+[data-reveal] {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.9s var(--ease), transform 0.9s var(--ease);
+  transition-delay: var(--reveal-delay, 0ms);
+  will-change: opacity, transform;
+}
+[data-reveal='left']  { transform: translateX(-40px); }
+[data-reveal='right'] { transform: translateX(40px); }
+[data-reveal='scale'] { transform: scale(0.94) translateY(16px); }
+[data-reveal='blur']  { filter: blur(8px); transition: opacity 1.1s var(--ease), transform 1.1s var(--ease), filter 1.1s var(--ease); }
+
+.is-revealed[data-reveal],
+.is-revealed[data-reveal='left'],
+.is-revealed[data-reveal='right'],
+.is-revealed[data-reveal='scale'],
+.is-revealed[data-reveal='blur'] {
+  opacity: 1;
+  transform: none;
+  filter: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-reveal] { opacity: 1 !important; transform: none !important; filter: none !important; transition: none !important; }
+  html { scroll-behavior: auto; }
+}
+
+/* Hero entrance (plays on load, no observer needed) */
+@keyframes rise-in {
+  from { opacity: 0; transform: translateY(36px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.animate-rise {
+  opacity: 0;
+  animation: rise-in 1.1s var(--ease) forwards;
+  animation-delay: var(--rise-delay, 0ms);
+}
+
+/* Slow ambient drift for hero decoration */
+@keyframes drift {
+  0%, 100% { transform: translate(0, 0) rotate(0deg); }
+  50%      { transform: translate(12px, -18px) rotate(2deg); }
+}
+.animate-drift { animation: drift 14s ease-in-out infinite; }
+
+/* Pulse used by the "compiling" indicator */
+@keyframes soft-pulse {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0.35; }
+}
+.animate-soft-pulse { animation: soft-pulse 1.6s ease-in-out infinite; }
+
+/* ------------------------------------------------------------------ */
+/*  Resume WYSIWYG overlay fields                                       */
+/* ------------------------------------------------------------------ */
+
+.resume-field {
+  position: absolute;
+  outline: none;
+  border-radius: 3px;
+  color: transparent;
+  caret-color: var(--navy);
+  cursor: text;
+  transition: box-shadow 0.25s var(--ease), background 0.25s var(--ease);
+}
+.resume-field:hover {
+  box-shadow: 0 0 0 1.5px var(--navy-s), 0 0 0 4px color-mix(in srgb, var(--navy-s) 40%, transparent);
+}
+.resume-field:hover::after {
+  content: '✎';
+  position: absolute;
+  top: -16px;
+  right: -4px;
+  font-size: 10px;
+  color: var(--navy);
+  opacity: 0.85;
+}
+.resume-field:focus {
+  background: var(--cream);
+  color: var(--ink);
+  box-shadow: 0 0 0 2px var(--navy);
+}
+
+/* Thin editorial scrollbars */
+.scroll-thin::-webkit-scrollbar { height: 8px; width: 8px; }
+.scroll-thin::-webkit-scrollbar-thumb { background: var(--rule); border-radius: 99px; }
+.scroll-thin::-webkit-scrollbar-thumb:hover { background: var(--stone); }
+.scroll-thin::-webkit-scrollbar-track { background: transparent; }

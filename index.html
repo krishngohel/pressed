@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pressed — Your career, polished.</title>
+    <meta name="description" content="Pressed by Meridia. Build your career vault, generate beautiful AI-tailored resumes, and track every application — all in one editorial workspace." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300..700;1,6..72,300..700&family=Inter+Tight:wght@300..800&family=JetBrains+Mono:wght@400..700&display=swap"
+      rel="stylesheet"
+    />
+    <script>
+      // Theme boot — inject saved theme overrides before first paint (no FOUC).
+      (function () {
+        try {
+          var raw = localStorage.getItem('pressed:theme');
+          if (!raw) return;
+          var t = JSON.parse(raw);
+          if (!t || !t.css) return;
+          var style = document.createElement('style');
+          style.id = 'theme-overrides';
+          style.textContent = t.css;
+          document.head.appendChild(style);
+        } catch (e) {}
+      })();
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>
